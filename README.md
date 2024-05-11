@@ -1,4 +1,4 @@
-python3 -m pip install Django
+python3 -m pip install Django=3.7.2
 
 pip install -r requirements.txt
 
