@@ -1,17 +1,28 @@
-FROM python:3
+# Stage 1: Build environment
+FROM python:3.10.12 AS builder
 
-WORKDIR /data
+WORKDIR /app
 
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Stage 2: Runtime environment
+FROM python:3.10.12-slim
+
+WORKDIR /app
+
+# Copy built dependencies from the previous stage
+COPY --from=builder /usr/local/lib/python3.10/site-packages/ /usr/local/lib/python3.10/site-packages/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
+
+# Copy the rest of the application code
 COPY . .
-
-#RUN pip install django==3.7.2
-
-RUN pip install -r requirements.txt
-
-RUN python3 manage.py migrate
-
-RUN python3 manage.py makemigrations
 
 EXPOSE 8000
 
-CMD ["python3","manage.py","runserver","0.0.0.0:8000"]
+CMD ["python", "manage.py", "migrate"]
+CMD ["python", "manage.py", "makemigrations"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

@@ -16,3 +16,13 @@ full tutorial =  https://www.youtube.com/watch?v=gbyYXgiSgdM
 
 open http://localhost:8000/admin [login with superuser you created]
 add a movie to avoid error
+
+
+
+user = admin@netflix.com
+pass = America@2000
+
+superuser
+http://localhost:8000/admin 
+user = admin
+pass = admin
